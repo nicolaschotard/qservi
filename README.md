@@ -1,5 +1,6 @@
 # qservi
-Qserv integration into science analysis pipeline
+
+Qserv Integration into science analysis pipeline
 
 The goal of this project if to test qserv on real data processed
 through the LSST stack. Here is what we would like to cover:
