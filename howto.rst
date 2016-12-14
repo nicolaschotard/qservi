@@ -833,7 +833,7 @@ Query options:
   -o OUT_DIR, --out-dir OUT_DIR
                         Absolute path to directory for storing query
                         results.The results will be stored in
-                        <OUT_DIR>/qservTest_case<CASE_ID>/ (default:
+œ                        <OUT_DIR>/qservTest_case<CASE_ID>/ (default:
                         /qserv/run/tmp)
   -s STOP_AT_QUERY, --stop-at-query STOP_AT_QUERY
                         Stop at query with given number (default: 10000)
