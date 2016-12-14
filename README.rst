@@ -5,15 +5,17 @@ qservi
 
 The goal of this project if to test qserv on real data processed
 through the LSST stack. First try will be to use it in the `Clusters
-<https://github.com/nicolaschotard/Clusters>`_ pipeline. Here is what
-we would like to cover the following sections
+<https://github.com/nicolaschotard/Clusters>`_ pipeline. What we would
+like to cover is presented in the following sections.
 
 Data processing
 ---------------
 
 Process data through the stack and produced different catalogs
 (`forced_src`, `deepCoadd_meas`, `deepCoadd_forced_src`,etc.). This
-step is actually independent and must be done prior to this work.
+step is actually independent and must be done prior to this work. See
+the `reprocessing task force gihub page
+<https://github.com/LSSTDESC/ReprocessingTaskForce>`_ for more info.
 
 Create a qserv instance
 -----------------------
@@ -21,14 +23,16 @@ Create a qserv instance
 How to
 ``````
 
-- dowload and untar the following file (clone from github?)::
+- dowload and untar the following file::
 
     https://jira.lsstcorp.org/secure/attachment/28458/28458_qserv.tgz
 
 - or clone it from the `qserv <https://github.com/lsst/qserv>`_
-  github repository?      
+  github repository?
 - add the content of qserv/admin/tools/provision/ssh_config into
   your ~/.ssh/config file
+- you should have received the corresponding rsa keys and put them in
+  your ~/.ssh/ directory
 - install shmux: http://web.taranis.org/shmux/
 - go to qserv/admin/tools/docker/deployment/parallel and launch
   ``run-multinode-tests.sh`` which will launch the integration tests
@@ -42,7 +46,7 @@ How to
 Questions
 `````````
 
-- Other ways to install ad use qserv?
+- Other ways to install and use qserv? 
 
 Load the catalogs into qserv
 ----------------------------
@@ -50,10 +54,10 @@ Load the catalogs into qserv
 How to
 ``````
 
-See the `howto howto.rst`_ file.
+See the `howto <howto.rst>`_ file.
 
-Here is q list of command to run in order to test data, as it is
-currently done to test qserv incontinuous integration::
+Here is a list of command to run in order to test data, as it is
+currently done to test qserv in continuous integration::
 
   # connect to teh VM on the cloud
   ssh qserv-user-master-1
@@ -119,8 +123,8 @@ How do we make queries?
 - implement standard queries into the `Clusters
   <https://github.com/nicolaschotard/Clusters>`_ pipeline
 
-Tests
------
+Query tests
+-----------
 
 What test do we want to on qserv?
 
