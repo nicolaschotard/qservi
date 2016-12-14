@@ -84,11 +84,11 @@ currently done to test qserv in continuous integration::
 
 The test should have run.
 
-Nexts steps:
+Next steps:
 
 - Replace the content of qserv_testdata/datasets/case06/data/ with our own
   data set (see next section)
-- Check and update the query list
+- Check and update the query list in
   qserv_testdata/datasets/case06/queries/ with the real science
   queries we want to do (see last section)
 - open a python terminal and try python-queries
@@ -126,7 +126,7 @@ How do we make queries?
 Query tests
 -----------
 
-What test do we want to on qserv?
+What test do we want to run on qserv?
 
 - check standard astronomical queries
 
@@ -142,3 +142,8 @@ What test do we want to on qserv?
 - is one big query better than many smaller ones?
 - how complex can a query be?
 - other tests?
+
+Test other DBs
+--------------
+
+- MonetDB?
