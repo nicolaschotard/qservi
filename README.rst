@@ -1,13 +1,16 @@
-# qservi
+qservi
+======
 
-Qserv Integration into science analysis pipeline
+**Qserv Integration into science analysis pipeline.**
 
 The goal of this project if to test qserv on real data processed
-through the LSST stack. Here is what we would like to cover:
+through the LSST stack. First try will be to use it in the `Clusters
+<https://github.com/nicolaschotard/Clusters>`_ pipeline. Here is what
+we would like to cover:
 
 - Process data through the stack and produced different catalogs
   (`forced_src`, `deepCoadd_meas`, `deepCoadd_forced_src`,etc.). This
-  step is actually indepent and must be done prior to this work.
+  step is actually independent and must be done prior to this work.
 - Create a qserv instance:
 
   - dowload and untar the following file (clone from github?)::
@@ -27,28 +30,45 @@ through the LSST stack. Here is what we would like to cover:
     private/public keys. Ask Fabrice to send you these keys.
   - more info `here
     <https://github.com/lsst/qserv/tree/master/admin/tools/provision>`_
-    
-- Load the catalogs into a qserv:
+  - Other ways to install ad use qserv?
+
+- Load the catalogs into qserv:
 
   - What is the data format expected by qserv?
   - How to go from the stack output format to the qserv intput format?
 
     - Catalogs are stored in fits files
-    - How to access the scema?
+    - How to access the schema?
     - How to create csv files from these fits files? Is there a way to
       do that already implemented in the stack? Check on community or
       start a discussion about that if needed
 
   - Start the test with one or two catalogs, and a small part of the sky
-  - Write a script to take of that automatically. It should be able to
+  - Write a script to take care of that automatically. It should be able to
     load any catalog
   - See the qserv_testdata `repository
     <https://github.com/lsst/qserv_testdata>`_
 
 - How to query the data?
 
-  - python interface to query into qserv; native qserv tools? django?
+  - python interface to query into qserv: native qserv tools? django?
     something else?
   - implement standard queries into the `Clusters
-    <https://github.com/nicolaschotard/Clusters>`_ pipelne
-    
+    <https://github.com/nicolaschotard/Clusters>`_ pipeline
+
+- What tests do we want to run on qserv?
+
+  - check standard astronomical queries
+
+    - magnitude or signal to noise cuts
+    - specific target
+    - specific area
+    - combine several cuts
+    - join several tables/catalogs
+
+  - check efficiency of queries
+  - check repeatability of queries
+  - build a test dataset, and make sure that queries give the same output over time
+  - is one big query better than many smaller ones?
+  - how complex can a query be?
+  - other tests?
