@@ -1,0 +1,4 @@
+extensions: {data: .txt, schema: .sql, zip: .gz}
+tabes:
+  directors: [deepCoadd_meas]
+  partitioned-views: [deepCoadd_meas]
