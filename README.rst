@@ -3,10 +3,19 @@ qservi
 
 **Qserv Integration into science analysis pipeline.**
 
-The goal of this project if to test qserv on real data processed
+The goal of this project is to test qserv on real data processed
 through the LSST stack. First try will be to use it in the `Clusters
 <https://github.com/nicolaschotard/Clusters>`_ pipeline. What we would
 like to cover is presented in the following sections.
+
+- process a set of data, and produce the catalogs
+- create a qserv instance that we can use
+- load the catalogs in qserv - build automatic tools to do it)
+- query the data (build corresponding python tools)
+- create a set of quesry test
+- implement that into the Clusters pipeline
+- test other DB
+- extend that to other analysis
 
 Data processing
 ---------------
