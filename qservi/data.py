@@ -465,8 +465,8 @@ def concatenate_dicts(*dicts):
 
 def write_config(configfile="description.yaml"):
     config = {}
-    config['tabes'] = {'directors' :['deepCoadd_meas'],
-                       'partitioned-views': ['deepCoadd_meas']}
+    config['tables'] = {'directors' :['deepCoadd_meas'],
+                        'partitioned-views': ['deepCoadd_meas']}
     config['extensions'] = {'data': '.csv', 'schema': '.sql'} #, 'zip': '.gz'}
     yaml.dump(config, open(configfile, 'w'))
 
@@ -474,23 +474,34 @@ def write_catalog(path='testdata/output', catalog="deepCoadd_meas"):
     path = "/home/chotard/Work/scripts/analysis/test_Cluster/testdata/output/coadd_dir"
     print path
     data = Catalogs(path)
-    cats = data.load_catalogs(catalog)
-    dm.write("%s.csv" % catalog)
+    data.load_catalogs(catalog)
+    dm  = data.catalogs[catalog][:500]
+    dm.write("%s.csv" % catalog, format='csv')
+    write_sqlfile(dm, catalog)
     return data
 
 def write_sqlfile(cat, catalog="deepCoadd_meas"):
-    types = {'bool': '',
+    types = {'bool': 'boolean',
              'float32': 'float',
              'float64': 'float',
-             'int32': 'int',
-             'int64': 'int',
-             'string24': 'string',
-             'string8': 'string'}
+             'int32': 'int(11)',
+             'int64': 'int(11)',
+             'string24': 'char(5)',
+             'string8': 'char(5)'}
     f = open("%s.sql" % catalog, 'w')
-    f.write("DROP TABLE IF EXISTS `%s`;" % catalog)
-    f.write("CREATE TABLE `DeepCoadd` (")
+    f.write("DROP TABLE IF EXISTS `%s`;\n" % catalog)
+    f.write("CREATE TABLE `DeepCoadd` (\n")
     for k in cat.keys():
-        f.write("`%s` %s NOT NULL," % (k, types[cat[k].info.dtype.name]))
-    f.write("PRIMARY KEY (`objectId`),")
-    f.write("KEY `IDX_tract_patch_filter` (`tract`,`patch`,`filter`),")
-    f.write(") ENGINE=MyISAM DEFAULT CHARSET=latin1;")
+        f.write("`%s` %s NOT NULL,\n" % (k, types[cat[k].info.dtype.name]))
+    f.write("PRIMARY KEY (`objectId`),\n")
+    f.write("KEY `IDX_tract_patch_filter` (`tract`,`patch`,`filter`),\n")
+    f.write(") ENGINE=MyISAM DEFAULT CHARSET=latin1;\n")
+
+def write_all():
+    write_catalog()
+    write_config()
+
+    
+if __name__ == "__main__":
+
+    write_all()
