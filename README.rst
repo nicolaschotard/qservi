@@ -93,6 +93,14 @@ currently done to test qserv in continuous integration::
 
 The test should have run.
 
+To change the log level::
+
+  docker exec -it -u root qserv bash
+  apt-get install emacs # if not already there
+  export TERM=xterm
+  emacs -nw ~/.lsst/logging.ini
+  # and change the debug levels
+
 Next steps:
 
 - Replace the content of qserv_testdata/datasets/case06/data/ with our own
