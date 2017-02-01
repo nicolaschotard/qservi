@@ -10,22 +10,25 @@ DROP TABLE IF EXISTS `deepCoadd_meas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `deepCoadd_meas` (
-`base_ClassificationExtendedness_flag` boolean NOT NULL,
-`coord_dec` float NOT NULL,
-`patch` int(11) NOT NULL,
-`filter` char(5) NOT NULL,
-`coord_ra` float NOT NULL,
-`detect_isPrimary` boolean NOT NULL,
-`base_ClassificationExtendedness_value` float NOT NULL,
-`tract` char(5) NOT NULL,
-`ext_shapeHSM_HsmShapeRegauss_flag` boolean NOT NULL,
-`id` int(11) NOT NULL,
-`x_Src` float NOT NULL,
-`y_Src` float NOT NULL,
-`coord_ra_deg` float NOT NULL,
-`coord_dec_deg` float NOT NULL,
+`base_ClassificationExtendedness_flag` boolean NULL,
+`ext_shapeHSM_HsmShapeRegauss_flag` boolean NULL,
+`modelfit_CModel_fluxSigma` double NULL,
+`modelfit_CModel_flux` double NULL,
+`modelfit_CModel_flux_inner` double NULL,
+`filter` char(5) NULL,
+`coord_ra` double NULL,
+`detect_isPrimary` boolean NULL,
+`base_ClassificationExtendedness_value` double NULL,
+`coord_dec` double NULL,
+`id` bigint(20) NULL,
+`modelfit_CModel_mag` double NULL,
+`modelfit_CModel_magSigma` double NULL,
+`x_Src` double NULL,
+`y_Src` double NULL,
+`coord_ra_deg` double NULL,
+`coord_dec_deg` double NULL,
 PRIMARY KEY (`id`),
-KEY `IDX_tract_patch_filter` (`tract`,`patch`,`filter`)
+KEY `IDX_filter` (`filter`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

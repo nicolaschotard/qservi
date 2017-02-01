@@ -1,21 +1,19 @@
-qservi
-======
+qservi: Qserv Integration into science pipelines
+================================================
 
-**Qserv Integration into science analysis pipeline.**
-
-The goal of this project is to test qserv on real data processed
+The goal of this project is to test Qserv on real data processed
 through the LSST stack. First try will be to use it in the `Clusters
-<https://github.com/nicolaschotard/Clusters>`_ pipeline. What we would
-like to cover is presented in the following sections.
+<https://github.com/nicolaschotard/Clusters>`_ pipeline. Here qre the
+steps we would like to cover:
 
-- process a set of data, and produce the catalogs
-- create a qserv instance that we can use
-- load the catalogs in qserv - build automatic tools to do it)
-- query the data (build corresponding python tools)
-- create a set of quesry test
-- implement that into the Clusters pipeline
-- test other DB
-- extend that to other analysis
+- Process a set of data, and produce the catalogs (independent step);
+- Create a Qserv instance ready to ingest data;
+- Transform the catalgos into a data format that Qserv can ingest;
+- Load the catalogs in Qserv;
+- Create a set of queries to test the basic functionnqlities of Aserv;
+- Build of find python tools to make these queries;
+- Implement that into the Clusters pipeline;
+- Extend that to other analysis.
 
 Data processing
 ---------------
@@ -109,26 +107,7 @@ Next steps:
   qserv_testdata/datasets/case06/queries/ with the real science
   queries we want to do (see last section)
 - open a python terminal and try python-queries
-  
 
-Questions
-`````````
-
-What is the data format expected by qserv?
-
-- How to go from the stack output format to the qserv intput format?
-
-  - Catalogs are stored in fits files
-  - How to access the schema?
-  - How to create csv files from these fits files? Is there a way to
-    do that already implemented in the stack? Check on community or
-    start a discussion about that if needed
-
-- Start the test with one or two catalogs, and a small part of the sky
-- Write a script to take care of that automatically. It should be able to
-  load any catalog
-- See the qserv_testdata `repository
-  <https://github.com/lsst/qserv_testdata>`_
 
 Query the data
 --------------
@@ -159,8 +138,3 @@ What test do we want to run on qserv?
 - is one big query better than many smaller ones?
 - how complex can a query be?
 - other tests?
-
-Test other DBs
---------------
-
-- MonetDB?
