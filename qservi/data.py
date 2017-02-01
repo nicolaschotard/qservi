@@ -1,39 +1,18 @@
 """Data manager for the qservi package."""
 
 import yaml
-import numpy
-import h5py
-import fitsio
-from astropy.wcs import WCS, utils
-from astropy.coordinates import SkyCoord, Angle
-from astropy.table import Table, Column, vstack
-from astropy.units import Quantity
-from progressbar import Bar, ProgressBar, Percentage, ETA
-from termcolor import colored
-
-import gc
-import warnings
-warnings.filterwarnings("ignore")
-
-try:
-    from lsst.afw import image as afwimage
-    from lsst.afw import table as afwtable
-    import lsst.daf.persistence as dafPersist
-except ImportError:
-    print colored("WARNING: LSST stack is probably not installed", "yellow")
-
 from clusters.data import Catalogs
 
 
 def write_config(configfile="description.yaml"):
     config = {}
-    config['tables'] = {'directors' :['deepCoadd_meas'],
-                        'partitioned-tables': ['deepCoadd_meas']}
+    config['tables'] = {'directors' :['deepCoadd_meas', 'deepCoadd_forced_src'],
+                        'partitioned-tables': ['deepCoadd_meas', 'deepCoadd_forced_src']}
     config['extensions'] = {'data': '.csv',
                             'schema': '.sql'}
     yaml.dump(config, open(configfile, 'w'))
 
-    
+
 def write_catalog(path='testdata/output', catalog="deepCoadd_meas"):
     config = {'keys': {'deepCoadd_meas': ["coord*", "id",
                                           'base_ClassificationExtendedness_flag',
@@ -43,18 +22,32 @@ def write_catalog(path='testdata/output', catalog="deepCoadd_meas"):
                                           'detect_isPrimary']}}
     path = "/home/chotard/Work/scripts/analysis/test_Cluster/testdata/output/coadd_dir"
     data = Catalogs(path)
-    data.load_catalogs(catalog, **config)
+    data.load_catalogs(catalog) #, **config)
     print "\nINFO: Catalogs loaded"
-    dm  = data.catalogs[catalog][:500]
-    del dm['tract']
-    del dm['patch']
+    dm = data.catalogs[catalog]
+    tract, patch = dm['tract'], dm['patch']
+    if "," in tract[0]:
+        del dm['tract']
+        del dm['patch']
+        dm['patch'] = tract
+        dm['tract'] = patch
+    if 'id' in dm.keys():
+        dm['%sId' % catalog] = dm['id']
+        del dm['id']
+    elif 'objectId' in dm.keys():
+        dm['%sId' % catalog] = dm['objectId']
+        del dm['objectId']
+    for k in dm.keys():
+        if len(k) > 64:
+            print k, "too long, %i character" % len(k)
+            del dm[k]
     print "INFO: writing catalogs in %s.csv" % catalog
     dm.write("%s.csv" % catalog, format='csv')
     write_sqlfile(dm, catalog)
-    write_cfg(dm.keys())
+    write_cfg(dm.keys(), catalog)
     return data
 
-    
+
 def clean_catalog(catalog="deepCoadd_meas"):
     f = open("%s.csv" % catalog)
     lines = [l.replace('nan', '\N').replace('True', '1').replace('False', '0') for l in f][1:]
@@ -67,11 +60,11 @@ def clean_catalog(catalog="deepCoadd_meas"):
 
 def write_sqlfile(cat, catalog="deepCoadd_meas"):
     types = {'bool': 'boolean',
-             'float32': 'double',
+             'float32': 'float',
              'float64': 'double',
-             'int32': 'bigint(20)',
+             'int32': 'int(11)',
              'int64': 'bigint(20)',
-             'string24': 'char(5)',
+             'string24': 'char(16)',
              'string8': 'char(5)'}
     print "INFO: writing sql info in %s.sql" % catalog
     f = open("%s.sql" % catalog, 'w')
@@ -89,9 +82,8 @@ def write_sqlfile(cat, catalog="deepCoadd_meas"):
     f.write("CREATE TABLE `%s` (\n" % catalog)
     for k in cat.keys():
         f.write("`%s` %s NULL,\n" % (k, types[cat[k].info.dtype.name]))
-    f.write("PRIMARY KEY (`id`),\n")
-    #f.write("KEY `IDX_tract_patch_filter` (`tract`,`patch`,`filter`)\n")
-    f.write("KEY `IDX_filter` (`filter`)\n")
+    f.write("PRIMARY KEY (`%sId`),\n" % catalog)
+    f.write("KEY `IDX_tract_patch_filter` (`tract`,`patch`,`filter`)\n")
     f.write(") ENGINE=MyISAM DEFAULT CHARSET=latin1;\n")
     f.write("/*!40101 SET character_set_client = @saved_cs_client */;\n")
     f.write("/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;\n")
@@ -102,21 +94,25 @@ def write_sqlfile(cat, catalog="deepCoadd_meas"):
     f.close()
     return sorted(cat.keys())
 
+
 def write_cfg(keys, catalog='deepCoadd_meas'):
     print "INFO: Writing configurations in %s.cfg" % catalog
-    cfg = {'id': 'id'}
+    cfg = {'id': '%sId' % catalog}
     cfg['part'] = {'pos': 'coord_ra_deg, coord_dec_deg',
                    'overlap': 0.0001,
                    'subChunks': 1}
-    cfg['dirColName'] = "id"
-    cfg['in.csv'] = { "field": keys}
+    cfg['dirColName'] = "%sId" % catalog
+    cfg['in.csv'] = {"field": keys}
     yaml.dump(cfg, open("%s.cfg" % catalog, 'w'))
 
-def write_all():
-    write_catalog()
-    clean_catalog()
-    write_config()
-    
-if __name__ == "__main__":
 
-    write_all()
+def write_all(catalog):
+    write_catalog(catalog=catalog)
+    clean_catalog(catalog=catalog)
+
+
+if __name__ == "__main__":
+    write_all("deepCoadd_meas")
+    write_all("deepCoadd_forced_src")
+    #write_all("forced_src")
+    write_config()

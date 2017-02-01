@@ -1,4 +1,4 @@
 extensions: {data: .csv, schema: .sql}
 tables:
-  directors: [deepCoadd_meas]
-  partitioned-tables: [deepCoadd_meas]
+  directors: [deepCoadd_meas, deepCoadd_forced_src]
+  partitioned-tables: [deepCoadd_meas, deepCoadd_forced_src]
