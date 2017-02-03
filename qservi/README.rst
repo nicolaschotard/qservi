@@ -85,3 +85,10 @@ Do a query::
 
   select coord_ra_deg,deepCoadd_measId from deepCoadd_meas where deepCoadd_measId=1100182716504;
 
+DB scehma
+=========
+
+Current DB schema that I have in mind. It will be updated as I
+understand better waht I'm doing.
+
+..figure:: lsstdb.png
