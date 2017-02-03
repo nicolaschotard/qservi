@@ -91,4 +91,4 @@ DB scehma
 Current DB schema that I have in mind. It will be updated as I
 understand better waht I'm doing.
 
-..figure:: lsstdb.png
+..image:: lsstdb.png
