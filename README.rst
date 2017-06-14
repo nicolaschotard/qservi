@@ -55,6 +55,21 @@ Questions
 
 - Other ways to install and use qserv? 
 
+Local install and run
+`````````````````````
+
+- Install docker
+    - dnf (install docker  (or equivalent, i.e. yum)
+    - sudo groupadd docker && sudo gpasswd -a ${USER} docker && sudo systemctl restart docker
+    - sudo usermod -aG docker ${USE}
+    - newgrp docker
+    - sudo /bin/systemctl enable docker.service
+    - docker info   (to ckeck that it worked)
+- git clone https://github.com/lsst/qserv
+- cd qserv/admin/tools/docker/deployment/localhost
+- cp env.example.sh env.sh
+- ./run-multinode-tests.sh
+
 Load the catalogs into qserv
 ----------------------------
 
