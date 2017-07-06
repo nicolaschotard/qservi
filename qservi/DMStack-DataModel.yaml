@@ -1,0 +1,23 @@
+deepCoadd_forced_src:
+  autoincrement: true
+  cat_id_key: id
+  dependson: &id001
+  - [deepCoadd_ref, deepCoadd_ref_FK_id]
+  - [filter, filter_FK_id]
+  - [patch, patch_FK_id]
+  - [tract, tract_FK_id]
+  primarykey: deepCoadd_forced_srcId
+deepCoadd_meas:
+  autoincrement: true
+  cat_id_key: id
+  dependson: *id001
+  primarykey: deepcoadd_measId
+deepCoadd_ref: {autoincrement: false, cat_id_key: id, dependson: null, primarykey: deepCoadd_refId}
+filter: {autoincrement: true, cat_id_key: filter, dependson: null, primarykey: filterId}
+forced_src:
+  autoincrement: true
+  cat_id_key: id
+  dependson: *id001
+  primarykey: forced_srcId
+patch: {autoincrement: true, cat_id_key: patch, dependson: null, primarykey: patchId}
+tract: {autoincrement: true, cat_id_key: tract, dependson: null, primarykey: tractId}

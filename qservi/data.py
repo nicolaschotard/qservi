@@ -14,15 +14,41 @@ def write_config(configfile="description.yaml"):
 
 
 def write_catalog(path='testdata/output', catalog="deepCoadd_meas"):
-    config = {'keys': {'deepCoadd_meas': ["coord*", "id",
-                                          'base_ClassificationExtendedness_flag',
+    config = {"keys": {'deepCoadd_meas': ["coord*", "id", 'base_ClassificationExtendedness_flag',
                                           'base_ClassificationExtendedness_value',
-                                          'modelfit_CModel_flux*',
+                                          'modelfit_CModel_flux', 'modelfit_CModel_fluxSigma',
+                                          'modelfit_CModel_flag',
                                           'ext_shapeHSM_HsmShapeRegauss_flag',
-                                          'detect_isPrimary']}}
+                                          'ext_shapeHSM_HsmShapeRegauss_e1',
+                                          'ext_shapeHSM_HsmShapeRegauss_e2',
+                                          'ext_shapeHSM_HsmShapeRegauss_sigma',
+                                          'ext_shapeHSM_HsmShapeRegauss_resolution',
+                                          'ext_shapeHSM_HsmPsfMoments_flag',
+                                          'ext_shapeHSM_HsmPsfMoments_x',
+                                          'ext_shapeHSM_HsmPsfMoments_y',
+                                          'ext_shapeHSM_HsmPsfMoments_xx',
+                                          'ext_shapeHSM_HsmPsfMoments_xy',
+                                          'ext_shapeHSM_HsmPsfMoments_yy',
+                                          'ext_shapeHSM_HsmSourceMoments_flag',
+                                          'ext_shapeHSM_HsmSourceMoments_x',
+                                          'ext_shapeHSM_HsmSourceMoments_y',
+                                          'ext_shapeHSM_HsmSourceMoments_xx',
+                                          'ext_shapeHSM_HsmSourceMoments_xy',
+                                          'ext_shapeHSM_HsmSourceMoments_yy',
+                                          'base_CircularApertureFlux_9_0*',
+                                          'base_PsfFlux_flag', 'base_PsfFlux_flux',
+                                          'base_PsfFlux_fluxSigma',
+                                          'x_Src', 'y_Src', 'detect_isPrimary'],
+                       'deepCoadd_forced_src': ["coord*", "objectId", 'modelfit_CModel_flux',
+                                                'modelfit_CModel_flag', "modelfit_CModel*"]
+                   },
+              "patch": ['1,1', '1,3', '1,2', '1,4', '1,5'] 
+          }
     path = "/home/chotard/Work/scripts/analysis/test_Cluster/testdata/output/coadd_dir"
+    path = "/run/media/chotard/SAMSUNG/data/testdata/output/coadd_dir"
+    path = "/run/media/chotard/SAMSUNG/data/output/coadd_dir"
     data = Catalogs(path)
-    data.load_catalogs(catalog) #, **config)
+    data.load_catalogs(catalog, **config)
     print "\nINFO: Catalogs loaded"
     dm = data.catalogs[catalog]
     tract, patch = dm['tract'], dm['patch']
@@ -112,6 +138,7 @@ def write_all(catalog):
 
 
 if __name__ == "__main__":
+    write_all("deepCoadd_ref")
     write_all("deepCoadd_meas")
     write_all("deepCoadd_forced_src")
     #write_all("forced_src")
