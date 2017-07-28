@@ -4,7 +4,7 @@ mkdir data
 # remove teh sqlite database
 rm data/LSST.sql
 
-# setup and initializaton of the tas table
+# setup and initializaton of the task table
 python data_to_db.py --daemon --new
 python data_to_db.py --dump task
 
@@ -14,7 +14,7 @@ python data_to_db.py --file --level=0 --new --daemon
 
 -> the output command file is :  command_level0_12654.sql
 
-# run tasks amrked as "ready" in the task table
+# run tasks marked as "ready" in the task table
 #     in this casee task=12654, level-0
 #     and sets the task status to done
 python check_command_file.py
