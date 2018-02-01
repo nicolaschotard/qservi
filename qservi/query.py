@@ -48,12 +48,13 @@ class Query:
         for key, val in self.db_info.items():
             print(' - %s: %s' % (key, val))
 
-    def query(self, sqlquery, save=True):
+    def query(self, sqlquery, save=True, verbose=False):
 
-        print("Current query is")
-        print("  ", sqlquery)
         nrows = self.cursor.execute(sqlquery)
-        print("INFO: %i rows found for this query" % nrows)
+        if verbose:
+            print("Current query is")
+            print("  ", sqlquery)
+            print("INFO: %i rows found for this query" % nrows)
 
         columns_name = np.array(self.cursor.description)[:, 0]
         columns_value = np.array(self.cursor.fetchall())
@@ -70,18 +71,18 @@ class Query:
         if table not in tables[tables.colnames[0]]:
             raise KeyError("%s in not in the available list of tables (see `get_all_tables`)")
 
-    def get_all_tables(self):
+    def get_all_tables(self, **kwargs):
         if self.tables is None:
-            self.tables = self.query("SHOW TABLES")
+            self.tables = self.query("SHOW TABLES", **kwargs)
         return self.tables
 
-    def describe_table(self, table):
+    def describe_table(self, table, **kwargs):
         self._check_table(table)
-        return self.query("DESCRIBE %s" % table)
+        return self.query("DESCRIBE %s" % table, **kwargs)
 
-    def get_from_table(self, what, table):
+    def get_from_table(self, what, table, **kwargs):
         self._check_table(table)
-        return self.query("SELECT %s from %s" % (what, table))
+        return self.query("SELECT %s from %s" % (what, table), **kwargs)
 
 
 class QueryCatalogs(Query):
@@ -89,3 +90,56 @@ class QueryCatalogs(Query):
     def __init__(self, **kwargs):
 
         super(**kwargs).__init__()
+
+#   def select_galaxies(self):
+#       """Apply a few quality filters on the data tables."""
+#       # == Get the initial number of filter
+#       filters = q.query("SELECT * FROM filter")
+#       nfilt = len(filters)
+#       
+#       # == Filter the deepCoadd catalogs
+#
+#       query = "SELECT * from "
+#       # Select galaxies (and reject stars)
+#       # keep galaxy
+#       filt = cats['deepCoadd_meas']['base_ClassificationExtendedness_flag'] == 0
+#       
+#       # keep galaxy
+#       filt &= cats['deepCoadd_meas']['base_ClassificationExtendedness_value'] >= 0.5
+#
+#       # Gauss regulerarization flag
+#       filt &= cats['deepCoadd_meas']['ext_shapeHSM_HsmShapeRegauss_flag'] == 0
+#
+#       # Make sure to keep primary sources
+#       filt &= cats['deepCoadd_meas']['detect_isPrimary'] == 1
+#
+#       # Check the flux value, which must be > 0
+#       filt &= cats['deepCoadd_forced_src']['modelfit_CModel_flux'] > 0
+#
+#       # Select sources which have a proper flux value
+#       filt &= cats['deepCoadd_forced_src']['modelfit_CModel_flag'] == 0
+#
+#       # Check the signal to noise (stn) value, which must be > 10
+#       filt &= (cats['deepCoadd_forced_src']['modelfit_CModel_flux'] /
+#                cats['deepCoadd_forced_src']['modelfit_CModel_fluxSigma']) > 10
+#
+#       # == Only keeps sources with the 'nfilt' filters
+#       dmg = cats['deepCoadd_meas'][filt].group_by('id')
+#       dfg = cats['deepCoadd_forced_src'][filt].group_by(
+#           'id' if 'id' in cats['deepCoadd_forced_src'].keys() else 'objectId')
+#
+#       # Indices difference is a quick way to get the lenght of each group
+#       filt = (dmg.groups.indices[1:] - dmg.groups.indices[:-1]) == nfilt
+#
+#       output = {'deepCoadd_meas': dmg.groups[filt],
+#                 'deepCoadd_forced_src': dfg.groups[filt], 'wcs': cats['wcs']}
+#
+#       # == Filter the forced_src catalog: only keep objects present in the other catalogs
+#       if "forced_src" not in cats.keys():
+#           return output
+#
+#       filt = np.where(np.in1d(cats['forced_src']['objectId'],
+#                               output['deepCoadd_meas']['id']))[0]
+#       output['forced_src'] = cats['forced_src'][filt]
+#
+#       return output
