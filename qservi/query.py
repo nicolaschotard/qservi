@@ -25,6 +25,7 @@ class Query:
 
         # Create an empty dictionary where all restuls will be saved
         self.results = {}
+        self.tables = None
 
     def dbinfo(self):
         print("INFO: Connected to")
@@ -47,3 +48,21 @@ class Query:
             self.results[len(self.results) + 1] = results
 
         return table
+
+    def _check_table(self, table):
+        tables = self.get_all_tables()
+        if table not in tables[tables.colnames[0]]:
+            raise KeyError("%s in not in the available list of tables (see `get_all_tables`)")
+
+    def get_all_tables(self):
+        if self.tables in None:
+            self.tables = self.query("SHOW TABLES")
+        return self.tables
+
+    def describe_table(self, table):
+        self._check_table(table)
+        return self.query("DESCRIBE %s" % table)
+
+    def get_from_table(self, what, table):
+        self._check_table(table)
+        return self.query("SELECT %s from %s" % (what, table))
