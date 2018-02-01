@@ -21,7 +21,7 @@ class Query:
         self.dbinfo()
 
         # Create a new cursor
-        self.cursor = db.cursor()
+        self.cursor = self.db.cursor()
 
         # Create an empty dictionary where all restuls will be saved
         self.results = {}
