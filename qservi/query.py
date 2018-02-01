@@ -9,6 +9,22 @@ from astropy.table import Table
 
 
 class Query:
+    """
+    Simple class to connec to a DB and make queries. All returned queries are Astropy tables.
+
+    Examples:
+
+    import query
+    q = query.Query() 
+    tables = q.get_all_tables()  # `tables` will be an astropy table
+    q.describe_table('filter')  
+    d = q.get_from_table('*', 'filter')  # `d` will be an astropy table
+    d = q.get_from_table('modelfit_CModel_mag', 'deepCoadd_meas')  # (what, from)
+    d = q.query('SELECT * from deepCoadd_meas WHERE modelfit_CModel_mag < 24')
+    d = q.query("SELECT * from deepCoadd_meas, filter WHERE filter_fkId=filter.filterId AND filter.filter='i';")
+    d = q.query("SELECT * from deepCoadd_meas, patch WHERE patch_fkId=patch.patchId AND patch.patch='1,5';")
+
+    """
 
     def __init__(self, user="qsmaster", host="172.18.0.2", port=4040, db="qservTest_case98_qserv"):
 
@@ -24,7 +40,7 @@ class Query:
         self.cursor = self.db.cursor()
 
         # Create an empty dictionary where all restuls will be saved
-        self.results = {}
+        self.queries = {}
         self.tables = None
 
     def dbinfo(self):
@@ -41,13 +57,13 @@ class Query:
 
         columns_name = np.array(self.cursor.description)[:, 0]
         columns_value = np.array(self.cursor.fetchall())
-        table = Table(columns_value, names=columns_name)
+        result = Table(columns_value, names=columns_name)
 
         if save:
-            results = {"sqlquery": sqlquery, "output": table}
-            self.results[len(self.results) + 1] = results
+            query = {"sqlquery": sqlquery, "output": result}
+            self.queries[len(self.queries) + 1] = query
 
-        return table
+        return result
 
     def _check_table(self, table):
         tables = self.get_all_tables()
@@ -66,3 +82,10 @@ class Query:
     def get_from_table(self, what, table):
         self._check_table(table)
         return self.query("SELECT %s from %s" % (what, table))
+
+
+class QueryCatalogs(Query):
+            
+    def __init__(self, **kwargs):
+
+        super(**kwargs).__init__()
