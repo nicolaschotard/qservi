@@ -35,7 +35,7 @@ class Query:
 
         print("Current query is")
         print("  ", sqlquery)
-        nrows = self.cursor.execute("SELECT * from filter")
+        nrows = self.cursor.execute(sqlquery)
         print("INFO: %i rows found for this query" % nrows)
 
         columns_name = np.array(self.cursor.description)[:, 0]
