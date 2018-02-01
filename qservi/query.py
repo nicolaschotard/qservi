@@ -55,7 +55,7 @@ class Query:
             raise KeyError("%s in not in the available list of tables (see `get_all_tables`)")
 
     def get_all_tables(self):
-        if self.tables in None:
+        if self.tables is None:
             self.tables = self.query("SHOW TABLES")
         return self.tables
 
