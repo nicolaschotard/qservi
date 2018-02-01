@@ -1,26 +1,50 @@
-import pymysql.cursors
-
-# Connect to the database
-connection = pymysql.connect(host='localhost',
-                             user='root',
-                             password='CHANGEME',
-                             db='db',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-
-table = "deepCoadd_meas"
-try:
-
-    with connection.cursor() as cursor:
-        # Read a single record
-        sql = "SELECT d.id, d.modelfit_CModel_mag FROM %s AS d WHERE d.modelfit_CModel_mag < 24" % \
-              table
-        cursor.execute(sql, ('webmaster@python.org',))
-        result = cursor.fetchone()
-        print(result)
-finally:
-    connection.close()
+"""
+Some doc https://mysqlclient.readthedocs.io/index.html
+"""
 
 
+import MySQLdb
+from astropy.table import Table
 
-    mysql --sock=/qserv/run/var/lib/mysql/mysql.sock --user=root --password=CHANGEME --batch qservTest_case06_mysql -e SELECT d.id, d.coord_ra_deg, d.coord_dec_deg, d.modelfit_CModel_mag FROM deepCoadd_meas d WHERE d.modelfit_CModel_mag < 24
+
+class Query:
+
+    def __init__(self, user="qsmaster", host="172.18.0.2", port=4040, db="qservTest_case98_qserv")):
+
+        # Connect to the data base
+        self.db = MySQLdb.connect(user=user, host=host, port=port, db=db)
+        self.db_info = {'user': user,
+                        'host': host,
+                        'port': port,
+                        'db': db}
+        self.dbinfo()
+        
+        # Create a new cursor
+        self.cursor = db.cursor()
+
+        # Create an empty dictionary where all restuls will be saved
+        self.results = {}
+
+    def dbinfo(self):
+        print("INFO: Connected to")
+        for key, val in self.db_info.items():
+            print(' - %s: %s' % (key, val ))
+
+    def query(self, sqlquery, save=True):
+
+        print("Current query is")
+        print("  " sqlquery)
+        nrows = cursor.execute("SELECT * from filter")
+        print("INFO: %i rows found for this query")
+
+        columns_name = np.array(cursor.description)[:,0]
+        columns_value = np.array(cursor.fetchall())
+        table = Table(columns_value, names=columns_name)
+
+        if save:
+            results = {"sqlquery": sqlquery, "output": table}
+            self.results[len(self.results) + 1] = results
+
+        return table
+
+    
