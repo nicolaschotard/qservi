@@ -128,7 +128,7 @@ class QueryCatalogs(Query):
 
         # == Filter the deepCoadd catalogs
 
-        query = "SELECT * from deepCoadd_meas as dm, deepCoadd_forced_src as dfs WHERE dm.deepCoadd_ref_fkId=dfs.deepCoadd_ref_fkId "
+        query = "SELECT * FROM deepCoadd_meas AS dm, deepCoadd_forced_src AS dfs WHERE dm.deepCoadd_ref_fkId=dfs.deepCoadd_ref_fkId "
         # Select galaxies (and reject stars)
         # keep galaxy
         query += "AND dm.base_ClassificationExtendedness_flag=0 "
@@ -158,6 +158,8 @@ class QueryCatalogs(Query):
         query += "AND (dfs.modelfit_CModel_flux/dfs.modelfit_CModel_fluxSigma)>10 "
         #filt &= (cats['deepCoadd_forced_src']['modelfit_CModel_flux'] /
         #         cats['deepCoadd_forced_src']['modelfit_CModel_fluxSigma']) > 10
+
+        query += ";"
 
         return self.query(query, verbose=True)
  #
