@@ -159,7 +159,7 @@ class QueryCatalogs(Query):
         #filt &= (cats['deepCoadd_forced_src']['modelfit_CModel_flux'] /
         #         cats['deepCoadd_forced_src']['modelfit_CModel_fluxSigma']) > 10
 
-        return self.query(query)
+        return self.query(query, verbose=True)
  #
  ## == Only keeps sources with the 'nfilt' filters
  #dmg = cats['deepCoadd_meas'][filt].group_by('id')
