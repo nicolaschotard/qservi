@@ -122,7 +122,7 @@ class QueryCatalogs(Query):
     def select_galaxies(self):
         """Apply a few quality filters on the data tables."""
         # == Get the initial number of filter
-        filters = q.query("SELECT * FROM filter")
+        filters = self.query("SELECT * FROM filter")
         nfilt = len(filters)
 
         # == Filter the deepCoadd catalogs
