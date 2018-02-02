@@ -54,10 +54,11 @@ class Query:
 
     def query(self, sqlquery, save=True, verbose=False):
 
-        nrows = self.cursor.execute(sqlquery)
         if verbose:
             print("Current query is")
             print("  ", sqlquery)
+        nrows = self.cursor.execute(sqlquery)
+        if verbose:
             print("INFO: %i rows found for this query" % nrows)
 
         columns_name = np.array(self.cursor.description)[:, 0]
