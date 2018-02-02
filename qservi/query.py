@@ -151,7 +151,7 @@ class QueryCatalogs(Query):
 
         # Select sources which have a proper flux value
         query += "AND dfs.modelfit_CModel_flag=0 "
-        filt &= cats['deepCoadd_forced_src']['modelfit_CModel_flag'] == 0
+        #filt &= cats['deepCoadd_forced_src']['modelfit_CModel_flag'] == 0
 
         # Check the signal to noise (stn) value, which must be > 10
         query += "AND (dfs.modelfit_CModel_flux/dfs.modelfit_CModel_fluxSigma)>10 "
